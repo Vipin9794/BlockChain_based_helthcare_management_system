@@ -17,13 +17,11 @@ const DropDown = ({ currentMode }) => (
   </div>
 );
 
-
 const Ecommerce = () => {
   const { currentColor, currentMode } = useStateContext();
   const [telemedicineSessions, setTelemedicineSessions] = useState([]);
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [appointments, setAppointments] = useState([]);
-
 
   useEffect(() => {
     const fetchDetailedEarnings = async () => {
@@ -58,25 +56,24 @@ const Ecommerce = () => {
         console.error('Error fetching telemedicine sessions:', error);
       }
     };
-  
+
     fetchTelemedicineSessions();
   }, []);
-
 
   const generateReport = () => {
     const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text('Earnings Report', 14, 22);
 
-    const tableColumn = ["Patient Name", "Patient Email", "Date", "Amount"];
+    const tableColumn = ['Patient Name', 'Patient Email', 'Date', 'Amount'];
     const tableRows = [];
 
-    appointments.forEach(appointment => {
+    appointments.forEach((appointment) => {
       const appointmentData = [
         appointment.patientName,
         appointment.patientEmail,
         new Date(appointment.date).toLocaleDateString(),
-        `Rs. ${appointment.paymentAmount.toFixed(2)}`
+        `Rs. ${appointment.paymentAmount.toFixed(2)}`,
       ];
       tableRows.push(appointmentData);
     });
@@ -86,7 +83,7 @@ const Ecommerce = () => {
       head: [tableColumn],
       body: tableRows,
       startY: 30,
-      theme: 'striped'
+      theme: 'striped',
     });
 
     // Add total earnings at the bottom
@@ -94,13 +91,13 @@ const Ecommerce = () => {
 
     doc.save('detailed_earnings_report.pdf');
   };
-  
+
   return (
     <div className="mt-5">
       <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg h-44 rounded-xl w-full lg:w-80 p-8 pt-9 m-3 bg-hero-pattern bg-no-repeat bg-cover bg-center">
           <div className="flex justify-between items-center ">
-            <div className=''>      
+            <div className="">
               <p className="font-bold text-gray-400 ">Earnings</p>
               <p className="text-2xl">Rs. {totalEarnings}</p>
             </div>
@@ -150,15 +147,11 @@ const Ecommerce = () => {
             <p className="font-semibold text-xl">Revenue Updates</p>
             <div className="flex items-center gap-4">
               <p className="flex items-center gap-2 text-gray-600 hover:drop-shadow-xl">
-                <span>
-                 
-                </span>
+                <span />
                 <span>Expense</span>
               </p>
               <p className="flex items-center gap-2 text-green-400 hover:drop-shadow-xl">
-                <span>
-                  
-                </span>
+                <span />
                 <span>Budget</span>
               </p>
             </div>
@@ -174,19 +167,18 @@ const Ecommerce = () => {
                 </p>
                 <p className="text-gray-500 mt-1">Income</p>
               </div>
-           
 
               <div className="mt-5">
                 <SparkLine currentColor={currentColor} id="line-sparkLine" type="Line" height="80px" width="250px" data={SparklineAreaData} color={currentColor} />
               </div>
               <button
-              type="button"
-              style={{ backgroundColor: currentColor }}
-              className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
-              onClick={generateReport}
-            >
-              Download Report
-            </button>
+                type="button"
+                style={{ backgroundColor: currentColor }}
+                className="text-2xl opacity-0.9 text-white hover:drop-shadow-xl rounded-full  p-4"
+                onClick={generateReport}
+              >
+                Download Report
+              </button>
             </div>
             <div>
               <Stacked currentMode={currentMode} width="320px" height="360px" />
@@ -232,22 +224,19 @@ const Ecommerce = () => {
             <DropDown currentMode={currentMode} />
           </div>
           <div className="mt-10 w-72 md:w-400">
-          {telemedicineSessions.map((session) => (
-      <div key={session._id} className="flex justify-between mt-4">
+            {telemedicineSessions.map((session) => (
+              <div key={session._id} className="flex justify-between mt-4">
                 <div className="flex gap-4">
                   <button
                     type="button"
-                   
+
                     className="text-2xl rounded-lg p-4 hover:drop-shadow-xl"
-                  >
-               
-                  </button>
+                  />
                   <div>
-                  <p className="text-md font-semibold">{session.patientEmail}</p>
-          <p className="text-sm text-gray-400">{session.time}</p>
+                    <p className="text-md font-semibold">{session.patientEmail}</p>
+                    <p className="text-sm text-gray-400">{session.time}</p>
                   </div>
                 </div>
-            
 
               </div>
             ))}
@@ -265,8 +254,6 @@ const Ecommerce = () => {
             <p className="text-gray-400 text-sm">36 Recent Sessions</p>
           </div>
         </div>
-
-        
 
         <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-96 md:w-760">
           <div className="flex justify-between items-center gap-2 mb-10">

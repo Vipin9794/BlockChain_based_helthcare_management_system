@@ -1,6 +1,7 @@
-import { feedback } from "../../constants";
-import styles from "../../style";
-import FeedbackCard from "./FeedbackCard";
+import React from 'react';
+import { feedback } from '../../constants';
+import styles from '../../style';
+import FeedbackCard from './FeedbackCard';
 
 const Testimonials = () => (
   <section id="clients" className={`${styles.paddingY} ${styles.flexCenter} flex-col relative `}>
@@ -11,9 +12,7 @@ const Testimonials = () => (
         What People are <br className="sm:block hidden" /> saying about us
       </h2>
       <div className="w-full md:mt-0 mt-6">
-        <p className={`${styles.paragraph} text-left max-w-[450px]`}>
-         
-        </p>
+        <p className={`${styles.paragraph} text-left max-w-[450px]`} />
       </div>
     </div>
 

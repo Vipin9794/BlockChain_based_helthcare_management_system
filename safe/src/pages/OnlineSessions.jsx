@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Web3 from "web3";
+import Web3 from 'web3';
 import { useCookies } from 'react-cookie';
-import contract from '../contracts/contract.json';
 import Modal from 'react-modal';
+import contract from '../contracts/contract.json';
 import '../table.css';
 import '../details.css';
 
@@ -32,18 +32,18 @@ const customStyles = {
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
   const web3 = new Web3(window.ethereum);
-  const myContract = new web3.eth.Contract(contract["abi"], contract["address"]);
+  const myContract = new web3.eth.Contract(contract.abi, contract.address);
   const [cookies] = useCookies(['hash']);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [meetings, setMeetings] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const [modalTitle, setModalTitle] = useState('');
 
   useEffect(() => {
-    const hash = cookies['hash'];
+    const { hash } = cookies;
     fetch(`http://localhost:8080/ipfs/${hash}`)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(({ mail }) => {
         setEmail(mail);
       });
@@ -82,7 +82,7 @@ const Appointments = () => {
 
   const copyToClipboard = (content) => {
     navigator.clipboard.writeText(content).then(() => {
-      alert("Copied to clipboard");
+      alert('Copied to clipboard');
     }, (err) => {
       console.error('Error copying text: ', err);
     });
@@ -90,7 +90,7 @@ const Appointments = () => {
 
   return (
     <div className="appointments-container">
-      <h1 className='session-title text-white'>Telemedicine Sessions</h1>
+      <h1 className="session-title text-white">Telemedicine Sessions</h1>
       <div className="table-container">
         <table className="modernTable appointment-table">
           <thead>
@@ -104,10 +104,10 @@ const Appointments = () => {
             {meetings.map((meeting, index) => (
               <tr key={index}>
                 <td>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img  src={`http://localhost:8050/${meeting.doctorDetails.profilePicture}`} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
-              <span>{meeting.doctorDetails.name}</span>
-            </div>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src={`http://localhost:8050/${meeting.doctorDetails.profilePicture}`} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />
+                    <span>{meeting.doctorDetails.name}</span>
+                  </div>
                 </td>
                 <td>{new Date(meeting.time).toLocaleString()}</td>
                 <td>
@@ -120,7 +120,7 @@ const Appointments = () => {
         </table>
       </div>
       {loading && <p>Loading...</p>}
-      
+
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Meeting Detail" style={customStyles}>
         <h2 style={{ color: '#FFF' }}>{modalTitle}</h2>
         <p>{modalContent}</p>

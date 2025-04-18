@@ -2,7 +2,7 @@ import React from 'react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlineMedicalServices } from 'react-icons/md';
-import { CiMonitor } from "react-icons/ci";
+import { CiMonitor } from 'react-icons/ci';
 
 export const links = [
   {

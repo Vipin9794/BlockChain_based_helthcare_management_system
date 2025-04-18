@@ -1,91 +1,90 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { FaVideo, FaUser } from 'react-icons/fa';
+import { FaVideo, FaUser, FaArrowLeft, FaCheck, FaArrowRight,
+  FaStethoscope, FaHeartbeat, FaBrain, FaBone, FaEye, FaSearch,
+  FaBaby, FaAllergies, FaRadiationAlt, FaVirus, Fasearch,
+  FaSyringe, FaTablets, FaXRay, FaMicroscope, FaShieldVirus, FaUserNurse,
+} from 'react-icons/fa';
 import Calendar from 'react-calendar';
 import '../custom_calender.css';
-import { FaArrowLeft, FaCheck, FaArrowRight } from 'react-icons/fa';
-import { 
-  FaStethoscope, FaHeartbeat, FaBrain, FaBone, FaEye, FaSearch, 
-  FaBaby, FaAllergies, FaRadiationAlt, FaVirus, Fasearch,
-  FaSyringe, FaTablets, FaXRay, FaMicroscope, FaShieldVirus, FaUserNurse
-} from 'react-icons/fa';
-import Web3 from "web3";
+
+import Web3 from 'web3';
 import { useCookies } from 'react-cookie';
-import contract from '../contracts/contract.json';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { loadStripe } from '@stripe/stripe-js';
+import contract from '../contracts/contract.json';
 
 const specializations = [
-  "Primary Care",
-  "Surgery",
-  "Internal Medicine",
-  "Pediatrics",
-  "Obstetrics and Gynecology",
-  "Psychiatry",
-  "Dermatology",
-  "Ophthalmology",
-  "Orthopedics",
-  "Neurology",
-  "Cardiology",
-  "Gastroenterology",
-  "Pulmonology",
-  "Nephrology",
-  "Endocrinology",
-  "Radiology",
-  "Pathology",
-  "Allergy and Immunology",
-  "Infectious Diseases",
-  "Emergency Medicine"
+  'Primary Care',
+  'Surgery',
+  'Internal Medicine',
+  'Pediatrics',
+  'Obstetrics and Gynecology',
+  'Psychiatry',
+  'Dermatology',
+  'Ophthalmology',
+  'Orthopedics',
+  'Neurology',
+  'Cardiology',
+  'Gastroenterology',
+  'Pulmonology',
+  'Nephrology',
+  'Endocrinology',
+  'Radiology',
+  'Pathology',
+  'Allergy and Immunology',
+  'Infectious Diseases',
+  'Emergency Medicine',
 ];
 const baseFee = 5000; // Hypothetical base fee in LKR for a 1-hour consultation in primary care
 
 const specializationPricing = {
-  "Primary Care": 1.0, // No additional multiplier
-  "Surgery": 1.8,
-  "Internal Medicine": 1.3,
-  "Pediatrics": 1.2,
-  "Obstetrics and Gynecology": 1.5,
-  "Psychiatry": 1.4,
-  "Dermatology": 1.4,
-  "Ophthalmology": 1.3,
-  "Orthopedics": 1.5,
-  "Neurology": 1.6,
-  "Cardiology": 1.7,
-  "Gastroenterology": 1.3,
-  "Pulmonology": 1.2,
-  "Nephrology": 1.3,
-  "Endocrinology": 1.2,
-  "Radiology": 1.5,
-  "Pathology": 1.1,
-  "Allergy and Immunology": 1.2,
-  "Infectious Diseases": 1.3,
-  "Emergency Medicine": 1.5,
+  'Primary Care': 1.0, // No additional multiplier
+  Surgery: 1.8,
+  'Internal Medicine': 1.3,
+  Pediatrics: 1.2,
+  'Obstetrics and Gynecology': 1.5,
+  Psychiatry: 1.4,
+  Dermatology: 1.4,
+  Ophthalmology: 1.3,
+  Orthopedics: 1.5,
+  Neurology: 1.6,
+  Cardiology: 1.7,
+  Gastroenterology: 1.3,
+  Pulmonology: 1.2,
+  Nephrology: 1.3,
+  Endocrinology: 1.2,
+  Radiology: 1.5,
+  Pathology: 1.1,
+  'Allergy and Immunology': 1.2,
+  'Infectious Diseases': 1.3,
+  'Emergency Medicine': 1.5,
   // Add other specializations as needed
 };
 
 const specializationIcons = {
-  "Primary Care": <FaUserNurse />,
-  "Surgery": <FaSyringe />,
-  "Internal Medicine": <FaStethoscope />,
-  "Pediatrics": <FaBaby />,
-  "Obstetrics and Gynecology": <FaBaby />,
-  "Psychiatry": <FaBrain />,
+  'Primary Care': <FaUserNurse />,
+  Surgery: <FaSyringe />,
+  'Internal Medicine': <FaStethoscope />,
+  Pediatrics: <FaBaby />,
+  'Obstetrics and Gynecology': <FaBaby />,
+  Psychiatry: <FaBrain />,
   // Since FaSkin isn't available, you can use a general icon for Dermatology or an alternative
-  "Dermatology": <FaUserNurse />, // Alternative suggestion
-  "Ophthalmology": <FaEye />,
-  "Orthopedics": <FaBone />,
-  "Neurology": <FaBrain />,
-  "Cardiology": <FaHeartbeat />,
-  "Gastroenterology": <FaTablets />,
+  Dermatology: <FaUserNurse />, // Alternative suggestion
+  Ophthalmology: <FaEye />,
+  Orthopedics: <FaBone />,
+  Neurology: <FaBrain />,
+  Cardiology: <FaHeartbeat />,
+  Gastroenterology: <FaTablets />,
   // Add other specializations as needed with available icons
-  "Default": <FaStethoscope /> // Default icon for any unspecified specialization
+  Default: <FaStethoscope />, // Default icon for any unspecified specialization
 };
 
 const times = [
   '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
   '12:00 PM', '12:30 AM', '1:00 PM', '1:30 AM', '2:00 PM', '2:30 AM',
-  '3:00 PM', '3:30 AM', '4:00 PM', '4:30 AM', '5:00 PM'
+  '3:00 PM', '3:30 AM', '4:00 PM', '4:30 AM', '5:00 PM',
 ];
 
 const ProgressBar = ({ stages, currentStage }) => {
@@ -109,8 +108,8 @@ const ModeButton = ({ mode, selectedMode, setSelectedMode }) => {
     Physical: <FaUser />,
   };
   const descriptions = {
-    Online: "Consult from anywhere.",
-    "In-person": "Visit us in person.",
+    Online: 'Consult from anywhere.',
+    'In-person': 'Visit us in person.',
   };
 
   return (
@@ -141,7 +140,7 @@ const AppointmentBooking = () => {
   const [Payment, setPayment] = useState('');
   const [appointmentDetails, setAppointmentDetails] = useState({
     description: '',
-    mode: ''
+    mode: '',
   });
   const [value, onChange] = useState(new Date());
   const [doctors, setDoctors] = useState([]);
@@ -157,7 +156,7 @@ const AppointmentBooking = () => {
       const stripeKey = 'pk_test_51OaK8GIHxKiWcbbg97KaguBIGQhZnbfUF3YV77LXPFzLsijL0sqJswWSwClIO3GEVMpFTsd77WQo1JxxhHcrPW6W00KdYpfNWO';
       const stripeObject = await loadStripe(stripeKey);
       setStripe(stripeObject);
-      console.log("done");
+      console.log('done');
     } catch (error) {
       console.error('Error initializing Stripe:', error.message || error);
     }
@@ -184,7 +183,7 @@ const AppointmentBooking = () => {
 
     const fetchDoctorData = async () => {
       try {
-        const response = await fetch(`http://localhost:8050/api/appointments/getDoctors`);
+        const response = await fetch('http://localhost:8050/api/appointments/getDoctors');
         if (response.ok) {
           const data = await response.json();
           setDoctors(data);
@@ -198,18 +197,18 @@ const AppointmentBooking = () => {
   }, []);
 
   const web3 = new Web3(window.ethereum);
-  const mycontract = new web3.eth.Contract(contract["abi"], contract["address"]);
+  const mycontract = new web3.eth.Contract(contract.abi, contract.address);
   const [cookies, setCookie] = useCookies();
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [contactNumber, setContactNumber] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [contactNumber, setContactNumber] = React.useState('');
 
   useEffect(() => {
-    const hash = cookies['hash'];
+    const { hash } = cookies;
     fetch(`http://localhost:8080/ipfs/${hash}`)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         setName(res.name);
         setEmail(res.mail);
         setPassword(res.password);
@@ -287,25 +286,21 @@ const AppointmentBooking = () => {
     }
   };
 
-  const getFilteredDoctors = () => doctors.filter(doctor =>
-    doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getFilteredDoctors = () => doctors.filter((doctor) => doctor.name.toLowerCase().includes(searchTerm.toLowerCase())
+    || doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  const renderHomeStage = () => {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] text-gray-200 animate-fadeInScaleUp ">
-        <h1 className="text-6xl font-bold mb-4 text-teal-400">Welcome to Vital Guard</h1>
-        <p className="text-xl mb-8 max-w-md text-center text-gray-300">Begin your journey towards better health. Conveniently book appointments with top specialists.</p>
-        <button
-          onClick={() => setStage('selectSpecialization')}
-          className="bg-gradient-to-r from-teal-500 to-teal-400 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-xl hover:shadow-2xl"
-        >
-          Start Booking Process
-        </button>
-      </div>
-    );
-  };
+  const renderHomeStage = () => (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] text-gray-200 animate-fadeInScaleUp ">
+      <h1 className="text-6xl font-bold mb-4 text-teal-400">Welcome to Vital Guard</h1>
+      <p className="text-xl mb-8 max-w-md text-center text-gray-300">Begin your journey towards better health. Conveniently book appointments with top specialists.</p>
+      <button
+        onClick={() => setStage('selectSpecialization')}
+        className="bg-gradient-to-r from-teal-500 to-teal-400 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-xl hover:shadow-2xl"
+      >
+        Start Booking Process
+      </button>
+    </div>
+  );
 
   const renderSpecializationSelection = () => {
     const handleSpecializationSelection = (spec) => {
@@ -326,7 +321,7 @@ const AppointmentBooking = () => {
               onClick={() => handleSpecializationSelection(spec)}
             >
               <div className="text-2xl text-white">
-                {specializationIcons[spec] || specializationIcons["Default"]}
+                {specializationIcons[spec] || specializationIcons.Default}
               </div>
               <h3 className="text-xl font-semibold text-white">{spec}</h3>
             </div>
@@ -338,8 +333,8 @@ const AppointmentBooking = () => {
 
   const renderDateSelection = () => {
     const modes = [
-      { type: "Online", icon: <FaVideo />, description: "Consult from anywhere." },
-      { type: "In-person", icon: <FaUser />, description: "Visit us in person." },
+      { type: 'Online', icon: <FaVideo />, description: 'Consult from anywhere.' },
+      { type: 'In-person', icon: <FaUser />, description: 'Visit us in person.' },
     ];
 
     return (
@@ -388,7 +383,7 @@ const AppointmentBooking = () => {
                 if (selectedDate && selectedTime && selectedMode) {
                   setStage('viewDoctors');
                 } else {
-                  alert("Please select date, time, and mode to continue.");
+                  alert('Please select date, time, and mode to continue.');
                 }
               }}
             >
@@ -479,68 +474,64 @@ const AppointmentBooking = () => {
     );
   };
 
-  const renderAppointmentDetails = () => {
-    return (
-      <div className="flex flex-col items-center justify-start min-h-screen bg-[#21232a] text-white animate-fadeInScaleUp mt-20">
-        <div className="text-center">
-          <h2 className="text-4xl font-bold text-white mb-8">Confirm Your Appointment</h2>
-          <p className="text-lg text-gray-400 mb-6">Please provide a brief description of your reason for the visit.</p>
-        </div>
-
-        <div className="w-full max-w-lg">
-          <textarea
-            placeholder="Describe the reason for your appointment..."
-            className="w-full bg-gray-700 text-white rounded-lg p-4 mb-8 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={appointmentDetails.description}
-            onChange={(e) => setAppointmentDetails({ ...appointmentDetails, description: e.target.value })}
-          />
-
-          <div className="text-center">
-            <button
-              onClick={() => submitAppointmentRequest()}
-              className="text-lg py-3 px-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-full font-bold text-white shadow-lg hover:from-blue-600 hover:to-green-600 transition duration-300 ease-in-out"
-            >
-              Submit Request
-            </button>
-          </div>
-        </div>
+  const renderAppointmentDetails = () => (
+    <div className="flex flex-col items-center justify-start min-h-screen bg-[#21232a] text-white animate-fadeInScaleUp mt-20">
+      <div className="text-center">
+        <h2 className="text-4xl font-bold text-white mb-8">Confirm Your Appointment</h2>
+        <p className="text-lg text-gray-400 mb-6">Please provide a brief description of your reason for the visit.</p>
       </div>
-    );
-  };
 
-  const renderConfirmation = () => {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] p-4">
+      <div className="w-full max-w-lg">
+        <textarea
+          placeholder="Describe the reason for your appointment..."
+          className="w-full bg-gray-700 text-white rounded-lg p-4 mb-8 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={appointmentDetails.description}
+          onChange={(e) => setAppointmentDetails({ ...appointmentDetails, description: e.target.value })}
+        />
+
         <div className="text-center">
-          <h2 className="text-4xl font-bold text-green-400 mb-6">Success!</h2>
-          <p className="flex items-center justify-center text-white text-xl mb-8">
-            <svg className="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Your appointment request has been submitted successfully.
-          </p>
-          <p className="text-gray-400 mb-10">You will receive a confirmation shortly. Thank you for choosing us.</p>
           <button
-            onClick={() => setStage('home')}
-            className="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out"
+            onClick={() => submitAppointmentRequest()}
+            className="text-lg py-3 px-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-full font-bold text-white shadow-lg hover:from-blue-600 hover:to-green-600 transition duration-300 ease-in-out"
           >
-            <svg className="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path></svg>
-            Book Another Appointment
+            Submit Request
           </button>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+
+  const renderConfirmation = () => (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] p-4">
+      <div className="text-center">
+        <h2 className="text-4xl font-bold text-green-400 mb-6">Success!</h2>
+        <p className="flex items-center justify-center text-white text-xl mb-8">
+          <svg className="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Your appointment request has been submitted successfully.
+        </p>
+        <p className="text-gray-400 mb-10">You will receive a confirmation shortly. Thank you for choosing us.</p>
+        <button
+          onClick={() => setStage('home')}
+          className="inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out"
+        >
+          <svg className="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+          Book Another Appointment
+        </button>
+      </div>
+    </div>
+  );
 
   const submitAppointmentRequest = async () => {
     try {
-      let paymentStatus = "NotPaid";
-      if (paymentMethod === "Online") {
-        paymentStatus = "Paid";
+      let paymentStatus = 'NotPaid';
+      if (paymentMethod === 'Online') {
+        paymentStatus = 'Paid';
       }
 
       const response = await fetch('http://localhost:8050/api/appointments/createAppointment', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           patientEmail: email,
@@ -553,11 +544,11 @@ const AppointmentBooking = () => {
           time: selectedTime,
           mode: selectedMode,
           description: appointmentDetails.description,
-          status: "RequestPending",
+          status: 'RequestPending',
           paymentAmount: Payment,
-          paymentMethod: paymentMethod,
-          paymentStatus: paymentStatus
-        })
+          paymentMethod,
+          paymentStatus,
+        }),
       });
 
       if (response.ok) {
@@ -572,16 +563,14 @@ const AppointmentBooking = () => {
     }
   };
 
-  const renderBackButton = () => {
-    return (
-      <button
-        onClick={goToPreviousStage}
-        className="flex items-center text-blue-500 hover:text-blue-700 transition duration-300 ease-in-out mb-4 -mt-2"
-      >
-        <FaArrowLeft className="mr-2" /> Back
-      </button>
-    );
-  };
+  const renderBackButton = () => (
+    <button
+      onClick={goToPreviousStage}
+      className="flex items-center text-blue-500 hover:text-blue-700 transition duration-300 ease-in-out mb-4 -mt-2"
+    >
+      <FaArrowLeft className="mr-2" /> Back
+    </button>
+  );
 
   const renderNextButton = () => {
     if (stages.indexOf(stage) < stages.length - 1) {
@@ -597,35 +586,33 @@ const AppointmentBooking = () => {
     return null;
   };
 
-  const renderPaymentSelection = () => {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] p-4 text-white">
-        <h2 className="text-3xl font-bold mb-4 text-white">Select Payment Method</h2>
-        <div className="flex flex-col gap-4">
-          {selectedMode !== "Online" && (
-            <button
-              onClick={() => {
-                setPaymentMethod("Cash");
-                goToNextStage();
-              }}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Pay with Cash
-            </button>
-          )}
-          <button
-            onClick={() => {
-              setPaymentMethod("Online");
-              handleBuyClick();
-            }}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Pay Online
-          </button>
-        </div>
+  const renderPaymentSelection = () => (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#21232a] p-4 text-white">
+      <h2 className="text-3xl font-bold mb-4 text-white">Select Payment Method</h2>
+      <div className="flex flex-col gap-4">
+        {selectedMode !== 'Online' && (
+        <button
+          onClick={() => {
+            setPaymentMethod('Cash');
+            goToNextStage();
+          }}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Pay with Cash
+        </button>
+        )}
+        <button
+          onClick={() => {
+            setPaymentMethod('Online');
+            handleBuyClick();
+          }}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Pay Online
+        </button>
       </div>
-    );
-  };
+    </div>
+  );
 
   const renderCurrentStage = () => {
     const stageComponents = {
@@ -646,7 +633,7 @@ const AppointmentBooking = () => {
           <CSSTransition
             key={stage}
             addEndListener={(node, done) => {
-              node.addEventListener("transitionend", done, false);
+              node.addEventListener('transitionend', done, false);
             }}
             classNames="fade"
           >

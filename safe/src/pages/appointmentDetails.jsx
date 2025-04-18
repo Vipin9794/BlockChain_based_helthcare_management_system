@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Web3 from "web3";
+import Web3 from 'web3';
 import { useCookies } from 'react-cookie';
 import contract from '../contracts/contract.json';
 import '../table.css';
@@ -14,33 +14,33 @@ const Appointments = () => {
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const web3 = new Web3(window.ethereum);
   const mycontract = new web3.eth.Contract(
-    contract["abi"],
-    contract["address"]
+    contract.abi,
+    contract.address,
   );
   const [cookies] = useCookies();
-  const [email, setEmail] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [status, setStatus] = useState("");
-  const [mode, setMode] = useState("");
+  const [email, setEmail] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [status, setStatus] = useState('');
+  const [mode, setMode] = useState('');
 
   useEffect(() => {
-    const hash = cookies['hash'];
+    const { hash } = cookies;
     fetch(`http://localhost:8080/ipfs/${hash}`)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         setEmail(res.mail);
-        console.log(res)
-      })
+        console.log(res);
+      });
   }, []);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await fetch(`http://localhost:8050/api/appointments/getAllAppointments`);
+        const response = await fetch('http://localhost:8050/api/appointments/getAllAppointments');
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          console.log(data);
           setAppointments(data);
           setLoading(false);
         } else {
@@ -52,7 +52,7 @@ const Appointments = () => {
         setLoading(false);
       }
     };
-  
+
     fetchAppointments();
   }, []);
 
@@ -60,18 +60,18 @@ const Appointments = () => {
     let filtered = appointments;
 
     if (startDate && endDate) {
-      filtered = filtered.filter(appointment => {
+      filtered = filtered.filter((appointment) => {
         const appointmentDate = new Date(appointment.date);
         return appointmentDate >= new Date(startDate) && appointmentDate <= new Date(endDate);
       });
     }
 
     if (status) {
-      filtered = filtered.filter(appointment => appointment.status === status);
+      filtered = filtered.filter((appointment) => appointment.status === status);
     }
 
     if (mode) {
-      filtered = filtered.filter(appointment => appointment.mode === mode);
+      filtered = filtered.filter((appointment) => appointment.mode === mode);
     }
 
     setFilteredAppointments(filtered);
@@ -80,7 +80,7 @@ const Appointments = () => {
   const handleDownloadExcel = () => {
     const ws = XLSX.utils.json_to_sheet(filteredAppointments);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Appointments");
+    XLSX.utils.book_append_sheet(wb, ws, 'Appointments');
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, 'appointments_report.xlsx');
@@ -88,10 +88,10 @@ const Appointments = () => {
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
-    doc.text("Appointments Report", 20, 10);
+    doc.text('Appointments Report', 20, 10);
     doc.autoTable({
       head: [['Patient Email', 'Patient Name', 'Contact', 'Date', 'Time', 'Mode', 'Status', 'Room ID', 'Payment Amount', 'Payment Method', 'Payment Status']],
-      body: filteredAppointments.map(appointment => [
+      body: filteredAppointments.map((appointment) => [
         appointment.patientEmail,
         appointment.patientName,
         appointment.patientContactNo,
@@ -102,7 +102,7 @@ const Appointments = () => {
         appointment.roomID,
         appointment.paymentAmount,
         appointment.paymentMethod,
-        "Payed",
+        'Payed',
       ]),
     });
     doc.save('appointments_report.pdf');
@@ -110,22 +110,22 @@ const Appointments = () => {
 
   return (
     <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-full md:w-1200 mb-4 mx-auto">
-      <h1 className='text-black text-3xl font-bold mb-6'>All Appointments</h1>
+      <h1 className="text-black text-3xl font-bold mb-6">All Appointments</h1>
       <div className="flex justify-between mb-4">
         <div className="flex">
           <div className="mr-4">
             <label className="mr-2 text-black">Start Date:</label>
-            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black" />
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black" />
           </div>
           <div className="mr-4">
             <label className="mr-2 text-black">End Date:</label>
-            <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black" />
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black" />
           </div>
         </div>
         <div className="flex">
           <div className="mr-4">
             <label className="mr-2 text-black">Status:</label>
-            <select value={status} onChange={e => setStatus(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black">
+            <select value={status} onChange={(e) => setStatus(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black">
               <option value="">All</option>
               <option value="RequestPending">RequestPending</option>
               <option value="RequestAccepted">RequestAccepted</option>
@@ -136,7 +136,7 @@ const Appointments = () => {
           </div>
           <div className="mr-4">
             <label className="mr-2 text-black">Mode:</label>
-            <select value={mode} onChange={e => setMode(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black">
+            <select value={mode} onChange={(e) => setMode(e.target.value)} className="px-4 py-2 rounded border border-gray-300 text-black">
               <option value="">All</option>
               <option value="In-person">In-person</option>
               <option value="Online">Online</option>

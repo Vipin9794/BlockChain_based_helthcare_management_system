@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SiShopware } from 'react-icons/si';
-import logo from '../data/logo.png';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import logo from '../data/logo.png';
 
 import { links } from '../data/dummy2';
 import { useStateContext } from '../contexts/ContextProvider';
@@ -26,7 +26,7 @@ const Sidebar2 = () => {
         <>
           <div className="flex justify-between items-center">
             <Link to="/" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
-              <img style={{width:"24px"}} src={logo}/> <span>MediVault</span>
+              <img style={{ width: '24px' }} src={logo} /> <span>MediVault</span>
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
@@ -46,18 +46,18 @@ const Sidebar2 = () => {
                   {item.title}
                 </p>
                 {item.links.map((link) => (
-                 <NavLink
-                 to={`/doctor/${link.name.replace(/ /g,'')}`}
-                 key={link.name}
-                 onClick={handleCloseSideBar}
-                 style={({ isActive }) => ({
-                   backgroundColor: isActive ? currentColor : '',
-                 })}
-                 className={({ isActive }) => (isActive ? activeLink : normalLink)}
-               >
-                 {link.icon}
-                 <span className="capitalize ">{link.name}</span>
-               </NavLink>
+                  <NavLink
+                    to={`/doctor/${link.name.replace(/ /g, '')}`}
+                    key={link.name}
+                    onClick={handleCloseSideBar}
+                    style={({ isActive }) => ({
+                      backgroundColor: isActive ? currentColor : '',
+                    })}
+                    className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                  >
+                    {link.icon}
+                    <span className="capitalize ">{link.name}</span>
+                  </NavLink>
                 ))}
               </div>
             ))}

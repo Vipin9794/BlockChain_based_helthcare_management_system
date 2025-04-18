@@ -9,5 +9,5 @@ export { default as SparkLine } from './Charts/SparkLine';
 export { default as LineChart } from './Charts/LineChart';
 export { default as Stacked } from './Charts/Stacked';
 export { default as Pie } from './Charts/Pie';
-export {default as Sidebar2} from './Sidebar2';
-export {default as LinkButton} from './LinkButton'
+export { default as Sidebar2 } from './Sidebar2';
+export { default as LinkButton } from './LinkButton';

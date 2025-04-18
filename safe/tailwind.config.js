@@ -1,6 +1,6 @@
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
-  mode: "jit",
+  content: ['./index.html', './src/**/*.{js,jsx}'],
+  mode: 'jit',
   darkMode: 'class',
   theme: {
     fontFamily: {
@@ -18,10 +18,10 @@ module.exports = {
         },
         extend: {
           fontSize: {
-            '14': '14px',
+            14: '14px',
           },
           // ... other extended styles
-    
+
           colors: {
             // ... existing colors
             'card-bg': '#1F2937', // Dark card background color
@@ -29,8 +29,8 @@ module.exports = {
           boxShadow: {
             'custom-light': '0 2px 4px rgba(0, 0, 0, 0.1)',
             'custom-dark': '5px 5px 15px rgba(0, 0, 0, 0.5)', // Custom shadow for dark theme
-          }, 
-          backgroundImage: theme => ({
+          },
+          backgroundImage: (theme) => ({
             // ... existing background images
           }),
           keyframes: {
@@ -45,13 +45,13 @@ module.exports = {
         },
       },
       backgroundColor: {
-        'primary': "#00040f",
+        primary: '#00040f',
         'main-bg': '#FAFBFB',
         'main-dark-bg': '#20232A',
         'secondary-dark-bg': '#33373E',
         'light-gray': '#F7F7F7',
-        'second': '#252b36',
-        'third' : '#49505c',
+        second: '#252b36',
+        third: '#49505c',
         'half-transparent': 'rgba(0, 0, 0, 0.5)',
       },
       borderWidth: {

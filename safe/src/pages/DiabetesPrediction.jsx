@@ -36,9 +36,9 @@ function Diabetes() {
     const data = await response.json();
     const advice = data.prediction ? 'Please consult an endocrinologist for further evaluation and treatment.' : 'Continue maintaining a healthy lifestyle and schedule regular check-ups.';
     setPrediction({
-        message: `Prediction: ${data.prediction ? 'Diabetic' : 'Not Diabetic'}`,
-        isDiabetic: data.prediction,
-        advice: advice
+      message: `Prediction: ${data.prediction ? 'Diabetic' : 'Not Diabetic'}`,
+      isDiabetic: data.prediction,
+      advice,
     });
   };
 
@@ -56,21 +56,21 @@ function Diabetes() {
   const jsonData = prediction ? {
     ...formData,
     prediction: prediction.message,
-    advice: prediction.advice
+    advice: prediction.advice,
   } : {};
 
   const csvData = [
     ['Field', 'Value'],
     ...Object.entries(formData),
     ['Prediction', prediction ? prediction.message : ''],
-    ['Advice', prediction ? prediction.advice : '']
+    ['Advice', prediction ? prediction.advice : ''],
   ];
 
   return (
     <div className="flex flex-col items-center justify-start pt-10 dark:bg-main-dark-bg min-h-screen p-4">
       <form onSubmit={handleSubmit} className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg p-6 rounded-2xl w-full md:w-1200 mb-4 mx-auto">
-        <h1 className='text-white' style={{fontSize: '24px'}}>Diabetes Prediction</h1>
-        <p className='text-gray-400'>This Diabetes Prediction model will determine whether an individual has diabetes or not with an accuracy of 85.2%</p>
+        <h1 className="text-white" style={{ fontSize: '24px' }}>Diabetes Prediction</h1>
+        <p className="text-gray-400">This Diabetes Prediction model will determine whether an individual has diabetes or not with an accuracy of 85.2%</p>
         <br />
         <div className="flex flex-wrap -m-4">
           {Object.keys(formData).map((key) => (
@@ -78,14 +78,16 @@ function Diabetes() {
               <label htmlFor={key} className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-200">
                 {key.replace(/([A-Z])/g, ' $1').trim()}:
               </label>
-              <input type="text"
-                     name={key}
-                     id={key}
-                     value={formData[key]}
-                     onChange={handleChange}
-                     required
-                     placeholder={key} // Placeholder is the same as the key for simplicity, adjust if needed
-                     className="mt-1 block w-full rounded-md bg-white border-gray-300 shadow-sm text-gray-700 h-12 pl-3 pr-3"/>
+              <input
+                type="text"
+                name={key}
+                id={key}
+                value={formData[key]}
+                onChange={handleChange}
+                required
+                placeholder={key} // Placeholder is the same as the key for simplicity, adjust if needed
+                className="mt-1 block w-full rounded-md bg-white border-gray-300 shadow-sm text-gray-700 h-12 pl-3 pr-3"
+              />
             </div>
           ))}
         </div>
@@ -106,9 +108,11 @@ function Diabetes() {
             <CSVLink data={csvData} filename="Diabetes_Prediction_Report.csv" className="bg-blue-600 text-white font-bold p-3 rounded mr-2 hover:bg-blue-700 transition duration-300">
               Download CSV
             </CSVLink>
-            <a href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(jsonData, null, 2))}`}
-               download="Diabetes_Prediction_Report.json"
-               className="bg-blue-600 text-white font-bold p-3 rounded hover:bg-blue-700 transition duration-300">
+            <a
+              href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(jsonData, null, 2))}`}
+              download="Diabetes_Prediction_Report.json"
+              className="bg-blue-600 text-white font-bold p-3 rounded hover:bg-blue-700 transition duration-300"
+            >
               Download JSON
             </a>
           </div>

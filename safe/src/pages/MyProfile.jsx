@@ -1,40 +1,40 @@
-import React from "react";
-import { useState, useEffect } from 'react';
-import Navbar from "../components/Navbar";
-import Sidebar from "../components/Sidebar";
-import Footer from "../components/Footer";
+import React, { useState, useEffect } from 'react';
+
 import { useCookies } from 'react-cookie';
-import Web3 from "web3";
+import Web3 from 'web3';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import Footer from '../components/Footer';
 import contract from '../contracts/contract.json';
 
 const MyProfile = () => {
   const web3 = new Web3(window.ethereum);
   const mycontract = new web3.eth.Contract(
-    contract["abi"],
-    contract["address"]
+    contract.abi,
+    contract.address,
   );
   const [cookies, setCookie] = useCookies();
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   useEffect(() => {
-    const hash = cookies['hash'];
+    const { hash } = cookies;
     fetch(`http://localhost:8080/ipfs/${hash}`)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         setName(res.name);
         setEmail(res.mail);
         setPassword(res.password);
-      })
-  })
+      });
+  });
 
   const [auth, setAuth] = useState({
-    "type": "user",
-    "name": name,
-    "mail": email,
-    "password": password
-  })
+    type: 'user',
+    name,
+    mail: email,
+    password,
+  });
 
   const [disabled1, setDisabled1] = useState(true);
 
@@ -62,33 +62,30 @@ const MyProfile = () => {
 
   return (
     <div className="flex relative dark:bg-main-dark-bg">
-      
 
       <div
-        className={
-          "dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-10 w-full  "
-        }
+        className="dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-10 w-full  "
       >
-      
+
         <div className="flex justify-center m-10 ">
           <form className=" p-5 bg-slate-100 rounded-lg">
             <h1 className="text-center text-lg">User Profile</h1>
-
 
             <div className="py-2">
               <label className="text-black">
                 Name:
                 <input
                   id="inp"
-                  style={{ padding: "10px", margin: "10px", color: "black" }}
+                  style={{ padding: '10px', margin: '10px', color: 'black' }}
                   name="email"
                   type="email"
                   value={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   disabled={disabled1}
-                  required />
+                  required
+                />
               </label>
-              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick1}></input>
+              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick1} />
             </div>
 
             <div className="py-2">
@@ -96,32 +93,32 @@ const MyProfile = () => {
                 Email:
                 <input
                   id="inp"
-                  style={{ padding: "10px", margin: "10px" }}
+                  style={{ padding: '10px', margin: '10px' }}
                   name="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={disabled2}
-                  required />
+                  required
+                />
               </label>
-              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick2}></input>
+              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick2} />
             </div>
-
-
 
             <div className="py-2">
               <label className="text-black">
                 Password:
                 <input
-                  style={{ padding: "10px", margin: "10px" }}
+                  style={{ padding: '10px', margin: '10px' }}
                   name="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={disabled3}
-                  required />
-              </label >
-              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick3}></input>
+                  required
+                />
+              </label>
+              <input type="button" value="✎" className="text-2xl hover:text-blue-400 cursor-pointer" onClick={handleGameClick3} />
             </div>
 
             <div className="py-2">
@@ -131,7 +128,6 @@ const MyProfile = () => {
           </form>
         </div>
 
-        
       </div>
     </div>
   );

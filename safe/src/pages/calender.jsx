@@ -3,16 +3,17 @@ import { ScheduleComponent, ViewsDirective, ViewDirective, Day, Week, WorkWeek, 
 import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { useCookies } from 'react-cookie';
 import { Header } from '../components';
+
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 const Scheduler = () => {
   const [scheduleObj, setScheduleObj] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cookies] = useCookies(['hash']); // Corrected the useCookies hook usage
-  
+
   // Function to change the selected date in the calendar
   const change = (args) => {
-    if(scheduleObj) {
+    if (scheduleObj) {
       scheduleObj.selectedDate = args.value;
       scheduleObj.dataBind();
     }
@@ -24,11 +25,11 @@ const Scheduler = () => {
   // Effect to fetch user details
   useEffect(() => {
     // Assuming the 'hash' cookie is available and valid
-    const hash = cookies['hash'];
+    const { hash } = cookies;
     if (hash) {
       fetch(`http://localhost:8080/ipfs/${hash}`)
-        .then(res => res.json())
-        .then(res => {
+        .then((res) => res.json())
+        .then((res) => {
           // Assuming email is part of the response and is used to fetch appointments
           fetchAcceptedAppointments(res.mail);
         });
@@ -38,9 +39,9 @@ const Scheduler = () => {
   // Function to fetch accepted appointments
   const fetchAcceptedAppointments = (email) => {
     fetch(`http://localhost:8050/api/appointments/acceptedAppointments/${email}`)
-      .then(response => response.json())
-      .then(data => {
-        setAppointments(data.map(appointment => ({
+      .then((response) => response.json())
+      .then((data) => {
+        setAppointments(data.map((appointment) => ({
           Id: appointment._id,
           Subject: `${appointment.description}, for ${appointment.patientName}`,
           StartTime: new Date(appointment.date),
@@ -50,7 +51,7 @@ const Scheduler = () => {
         })));
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching accepted appointments:', error);
         setLoading(false);
       });

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { SiShopware } from 'react-icons/si';
-
+// import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.png';
 import { links } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -26,7 +25,7 @@ const Sidebar = () => {
         <>
           <div className="flex justify-between items-center">
             <Link to="/" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
-              <img style={{width:"124px"}} src={logo}/> <span></span>
+              <img style={{ width: '124px' }} src={logo} /> <span />
             </Link>
             <TooltipComponent content="Menu" position="BottomCenter">
               <button
@@ -47,7 +46,7 @@ const Sidebar = () => {
                 </p>
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/patient/${link.name.replace(/ /g,'')}`}
+                    to={`/patient/${link.name.replace(/ /g, '')}`}
                     key={link.name}
                     onClick={handleCloseSideBar}
                     style={({ isActive }) => ({

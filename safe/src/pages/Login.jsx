@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Web3 from "web3";
-import contract from "../contracts/contract.json";
-import { useCookies } from "react-cookie";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Web3 from 'web3';
+import { useCookies } from 'react-cookie';
+import contract from '../contracts/contract.json';
 import image from '../assets/login_background.jpeg';
 
 const Login = () => {
@@ -13,14 +13,14 @@ const Login = () => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
 
   const [log, setLog] = useState({
-    mail: "",
-    password: ""
+    mail: '',
+    password: '',
   });
 
   const web3 = new Web3(window.ethereum);
   const mycontract = new web3.eth.Contract(
-    contract["abi"],
-    contract["address"]
+    contract.abi,
+    contract.address,
   );
 
   const handle = (e) => {
@@ -34,60 +34,58 @@ const Login = () => {
   };
 
   const login = async (e) => {
-
-    var accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
+    const accounts = await window.ethereum.request({
+      method: 'eth_requestAccounts',
     });
-    var currentAddress = accounts[0];
-    Object.keys(cookies).forEach(cookieName => {
+    const currentAddress = accounts[0];
+    Object.keys(cookies).forEach((cookieName) => {
       removeCookie(cookieName, { path: '/' });
-  });
-    let userType = e ? 'doctor' : 'patient'; // Determine user type based on the event e
+    });
+    const userType = e ? 'doctor' : 'patient'; // Determine user type based on the event e
 
     // Common function for setting cookies and redirecting after login
     const onSuccessfulLogin = (userHash, userType) => {
-        setCookie('hash', userHash, { path: '/' }); // Ensure cookies are set for the root path
-        setCookie('type', userType, { path: '/' });
-        console.log(userHash)
-        alert("Logged in");
-        window.location.href = userType === 'patient' ? "patient/patientDashboard" : "doctor/myprofiledoc";
+      setCookie('hash', userHash, { path: '/' }); // Ensure cookies are set for the root path
+      setCookie('type', userType, { path: '/' });
+      console.log(userHash);
+      alert('Logged in');
+      window.location.href = userType === 'patient' ? 'patient/patientDashboard' : 'doctor/myprofiledoc';
     };
 
     if (!e) {
-        // Patient login logic
-        const patientData = await mycontract.methods.getPatient().call();
-        
-        for (let patientHash of patientData) {
-          console.log(patientHash)
-            try {
-                const data = await (await fetch(`http://localhost:8080/ipfs/${patientHash}`)).json();
-                if (data.mail === log.mail && data.password === log.password) {
-                    onSuccessfulLogin(patientHash, 'patient');
-                    return; // Stop the execution once the user is found and logged in
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        alert("Invalid login credentials for patient.");
-    } else {
-        // Doctor login logic
-        const doctorData = await mycontract.methods.getDoctor().call();
-        for (let doctorHash of doctorData) {
-            try {
-                const data = await (await fetch(`http://localhost:8080/ipfs/${doctorHash}`)).json();
-                if (data.mail === log.mail && data.password === log.password) {
-                    onSuccessfulLogin(doctorHash, 'doctor');
-                    return; // Stop the execution once the user is found and logged in
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        alert("Invalid login credentials for doctor.");
-    }
-};
+      // Patient login logic
+      const patientData = await mycontract.methods.getPatient().call();
 
+      for (const patientHash of patientData) {
+        console.log(patientHash);
+        try {
+          const data = await (await fetch(`http://localhost:8080/ipfs/${patientHash}`)).json();
+          if (data.mail === log.mail && data.password === log.password) {
+            onSuccessfulLogin(patientHash, 'patient');
+            return; // Stop the execution once the user is found and logged in
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      alert('Invalid login credentials for patient.');
+    } else {
+      // Doctor login logic
+      const doctorData = await mycontract.methods.getDoctor().call();
+      for (const doctorHash of doctorData) {
+        try {
+          const data = await (await fetch(`http://localhost:8080/ipfs/${doctorHash}`)).json();
+          if (data.mail === log.mail && data.password === log.password) {
+            onSuccessfulLogin(doctorHash, 'doctor');
+            return; // Stop the execution once the user is found and logged in
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      alert('Invalid login credentials for doctor.');
+    }
+  };
 
   return (
     <section className="bg-gray-50 min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(to right, #004e92,#000428)' }}>
@@ -101,11 +99,11 @@ const Login = () => {
             <div className="relative">
               <input className="p-2 rounded-xl border w-full" type={showPassword ? 'text' : 'password'} name="password" placeholder="Password" onChange={(e) => handle(e)} />
               <button type="button" onClick={togglePasswordVisibility}>
-              {showPassword ? (
+                {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" className="bi-eye-slash absolute top-1/2 right-3 -translate-y-1/2" viewBox="0 0 16 16">
-                  <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z"/>
-  <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829"/>
-  <path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z"/>
+                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z" />
+                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829" />
+                    <path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z" />
 
                   </svg>
                 ) : (
@@ -118,19 +116,19 @@ const Login = () => {
             </div>
             {/* User Type Dropdown */}
             <div className="relative">
-                        <div className="input-heading" >
-                            <h5 className="text-gray-300"> Type</h5>
-                            <select className="p-2 rounded-xl border w-full text-gray-400" id="user-type" name="type" onChange={() => { setType(!type) }} style={{padding:'0.5rem', backgroundColor:'white'}}>
-                                <option value="patient">Patient</option>
-                                <option value="doctor">Doctor</option>
-                            </select>
-                        </div>
-                    </div>
+              <div className="input-heading">
+                <h5 className="text-gray-300"> Type</h5>
+                <select className="p-2 rounded-xl border w-full text-gray-400" id="user-type" name="type" onChange={() => { setType(!type); }} style={{ padding: '0.5rem', backgroundColor: 'white' }}>
+                  <option value="patient">Patient</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+            </div>
             <input
               type="button"
               className="bg-[#002D74] rounded-xl text-gray-300 py-2 hover:scale-105 duration-300 cursor-pointer"
               value="Log In"
-              onClick={() => { login(type) }}
+              onClick={() => { login(type); }}
             />
           </form>
 
@@ -145,12 +143,12 @@ const Login = () => {
           </a>
 
           <div className="mt-5 text-xs border-b border-gray-300 py-4 text-gray-300">
-            <a href="link" >Forgot your password?</a>
+            <a href="link">Forgot your password?</a>
           </div>
 
           <div className="mt-3 text-xs flex justify-between items-center text-[#002D74] ">
-            <p className='text-gray-300'>Don't have an account?</p>
-            <a href='/signup' className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Sign Up</a>
+            <p className="text-gray-300">Don't have an account?</p>
+            <a href="/signup" className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Sign Up</a>
           </div>
         </div>
         <div className="md:block hidden w-1/2">

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Navbar, Footer, Sidebar,  ThemeSettings, Sidebar2 } from './components';
 import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { Navbar, Footer, Sidebar, ThemeSettings, Sidebar2 } from './components';
 import './App.css';
 
 import { useStateContext } from './contexts/ContextProvider';
@@ -63,7 +63,7 @@ const DashboardLayout = ({ children }) => {
             {themeSettings && (<ThemeSettings />)}
             {children}
           </div>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     </div>

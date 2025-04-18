@@ -1,14 +1,13 @@
 import React from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink } from 'react-router-dom';
 
+import { useCookies } from 'react-cookie';
 import { userProfileData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import avatar from '../data/avatar.png';
-import { useCookies } from 'react-cookie';
-import { Button , LinkButton} from '.';
-
+import { Button, LinkButton } from '.';
 
 const UserProfile = () => {
   const { currentColor } = useStateContext();
@@ -27,7 +26,7 @@ const UserProfile = () => {
     removeCookie('type');
     removeCookie('allergies');
 
-    window.location.href = "/";
+    window.location.href = '/';
   }
 
   return (
@@ -42,14 +41,14 @@ const UserProfile = () => {
           borderRadius="50%"
         />
         <LinkButton
-            to={'/patient/myprofile'}
-              color="white"
-              bgColor={currentColor}
-              text="user profile"
-              borderRadius="10px"
-            />
+          to="/patient/myprofile"
+          color="white"
+          bgColor={currentColor}
+          text="user profile"
+          borderRadius="10px"
+        />
       </div>
-       
+
       <div className="flex gap-5 items-center mt-6 border-color border-b-1 pb-6">
         <img
           className="rounded-full h-24 w-24"
@@ -57,13 +56,13 @@ const UserProfile = () => {
           alt="user-profile"
         />
         <div>
-          <p className="font-semibold text-xl dark:text-gray-200"> {cookies['name']} </p>
-          <p className="text-gray-500 text-sm dark:text-gray-400">  {cookies['type'].toUpperCase()}   </p>
-        <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> {cookies['mail']} </p>
+          <p className="font-semibold text-xl dark:text-gray-200"> {cookies.name} </p>
+          <p className="text-gray-500 text-sm dark:text-gray-400">  {cookies.type.toUpperCase()}   </p>
+          <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> {cookies.mail} </p>
         </div>
       </div>
       <div className="mt-5">
-        <input type="button" style={{backgroundColor: "rgb(3, 201, 215)", padding: "8px 12px", borderRadius:'4px', color:'white'}} value="Logout" onClick={logout} />
+        <input type="button" style={{ backgroundColor: 'rgb(3, 201, 215)', padding: '8px 12px', borderRadius: '4px', color: 'white' }} value="Logout" onClick={logout} />
       </div>
     </div>
 
