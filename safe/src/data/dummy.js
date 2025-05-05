@@ -6,6 +6,7 @@ import React from 'react';
 //   AiOutlineBarChart,
 //   AiOutlineStock,
 // } from "react-icons/ai";
+// import { AiOutlineDashboard } from 'react-icons/ai';
 import {
   // FiShoppingBag,
   // FiEdit,
@@ -528,6 +529,8 @@ export const links = [
       {
         name: 'patient Dashboard',
         icon: <CgProfile />,
+        // icon: <AiOutlineDashboard />
+        
       },
     ],
   },

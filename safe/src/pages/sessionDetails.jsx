@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
+// import Web3 from 'web3';
 import { useCookies } from 'react-cookie';
 import Modal from 'react-modal';
-import contract from '../contracts/contract.json';
+// import contract from '../contracts/contract.json';
 import '../table.css';
 import '../details.css';
 
@@ -32,8 +32,8 @@ Modal.setAppElement('#root'); // Assuming the root element of your app has the I
 
 const Appointments = () => {
   const [loading, setLoading] = useState(true);
-  const web3 = new Web3(window.ethereum);
-  const myContract = new web3.eth.Contract(contract.abi, contract.address);
+ //  const web3 = new Web3(window.ethereum);
+  // const myContract = new web3.eth.Contract(contract.abi, contract.address);
   const [cookies] = useCookies(['hash']);
   const [email, setEmail] = useState('');
   const [meetings, setMeetings] = useState([]);

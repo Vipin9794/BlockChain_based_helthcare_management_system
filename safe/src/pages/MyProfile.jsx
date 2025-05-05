@@ -61,7 +61,9 @@ const MyProfile = () => {
   }
 
   return (
+    
     <div className="flex relative dark:bg-main-dark-bg">
+      <Navbar/>
 
       <div
         className="dark:bg-main-dark-bg  bg-main-bg min-h-screen ml-10 w-full  "
@@ -129,6 +131,7 @@ const MyProfile = () => {
         </div>
 
       </div>
+     
     </div>
   );
 };

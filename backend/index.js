@@ -14,7 +14,9 @@ connection();
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // React app ka URL
+  }));
 
 // Configure Multer (adjust storage as needed)
 const storage = multer.diskStorage({

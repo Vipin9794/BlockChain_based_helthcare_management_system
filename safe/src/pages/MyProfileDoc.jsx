@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AiFillEdit, AiOutlineMail, AiOutlinePhone, AiOutlineCamera } from 'react-icons/ai';
 import { MdSave } from 'react-icons/md';
 
@@ -12,6 +13,7 @@ import contract from '../contracts/contract.json';
 const EditDoctorProfile = () => {
   const [isEditing, setisEditing] = useState(false);
   const [DoctorData, setDoctorData] = useState('');
+   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState('');
   const [cookies, setCookie] = useCookies();
   const [name, setName] = React.useState('');
@@ -182,6 +184,7 @@ const EditDoctorProfile = () => {
 
       if (response.ok) {
         const data = await response.json();
+        navigate('/doctor/DoctorDashboard');
         console.log('Success:', data);
       } else {
         console.error('Submission failed', await response.text());

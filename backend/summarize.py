@@ -1,3 +1,4 @@
+#summarize.py
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 def summarize_with_t5(example_text):

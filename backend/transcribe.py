@@ -1,3 +1,4 @@
+# transcribe.py
 from transformers import pipeline
 import whisper
 import sys

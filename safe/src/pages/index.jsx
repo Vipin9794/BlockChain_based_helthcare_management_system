@@ -13,7 +13,7 @@ export { default as DiabetesPrediction } from './DiabetesPrediction';
 export { default as ParkinsonPrediction } from './ParkinsonPrediction';
 export { default as HospitalizationHistory } from './HospitalizationHistory';
 export { default as Visits } from './Visit';
-export { default as Calender } from './calender';
+export { default as Calender } from './Scheduler';
 export { default as SessionDetails } from './sessionDetails';
 export { default as DoctorDashboard } from './DoctorDashboard';
 export { default as AppointmentDetails } from './appointmentDetails';
